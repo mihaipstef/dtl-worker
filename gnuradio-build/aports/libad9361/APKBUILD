@@ -1,0 +1,29 @@
+pkgname=libad9361
+pkgver=0.3
+pkgrel=0
+pkgdesc="IIO AD9361 library for filter design and handling, multi-chip sync, etc."
+url="https://github.com/analogdevicesinc/libad9361-iio"
+arch="x86_64"
+license="LGPL-2.1-or-later"
+makedepends=""
+subpackages=""
+source="https://github.com/analogdevicesinc/libad9361-iio/archive/refs/tags/v$pkgver/$pkgname-v$pkgver.tar.gz"
+builddir="$srcdir/libad9361-iio-$pkgver"
+
+
+build() {
+    #mkdir build
+    cmake -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_SBINDIR=bin \
+        -DCMAKE_INSTALL_LIBDIR=lib
+    cmake --build build
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+904f81fead71a9c93ccdcdb8822247fc8c496920abb9b13ea4b2b0465d50f5c0115ffc8d226496e76f7bb23b466031556129b18a1f35c65c30dcb3b0c1aeeff9  libad9361-v0.3.tar.gz
+"

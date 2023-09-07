@@ -1,0 +1,6 @@
+https://dl-cdn.alpinelinux.org/alpine/v3.17/main
+https://dl-cdn.alpinelinux.org/alpine/v3.17/community
+#@edge_testing https://dl-cdn.alpinelinux.org/alpine/edge/testing
+#@edge_main https://dl-cdn.alpinelinux.org/alpine/edge/main
+#@edge_community https://dl-cdn.alpinelinux.org/alpine/edge/community
+
