@@ -1,0 +1,76 @@
+pkgname=gnuradio
+pkgver=3.10.7.0
+pkgrel=0
+pkgdesc="General purpose DSP and SDR toolkit"
+url="https://www.gnuradio.org"
+arch="x86_64"
+license="GPL-3.0-or-later"
+depends="
+    py3-click
+    py3-click-plugins
+    py3-mako
+    py3-numpy
+    py3-scipy
+    py3-yaml
+    "
+depends_dev="
+    isl-dev
+    boost-dev
+    spdlog-dev
+    zeromq-dev
+    cppzmq
+    py3-mako
+    py3-pip
+    python3-dev
+    fftw-dev
+    py3-numpy-dev
+    py3-pybind11-dev
+    py3-pyzmq
+    libiio
+    libad9361
+    "
+makedepends="
+    $depends_dev
+    cmake
+    libvolk
+    "
+checkdepends="xvfb-run"
+subpackages="
+    $pkgname-dev
+    $pkgname-doc
+    "
+source="$pkgname-$pkgver.tar.gz::https://github.com/gnuradio/gnuradio/archive/v$pkgver.tar.gz"
+
+build() {
+    # inlining failed in call to 'always_inline' 'vsnprintf':
+    # function body can be overwritten at link time
+    export CXXFLAGS="$CXXFLAGS -flto=auto -U_FORTIFY_SOURCE"
+    cmake -B build \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DENABLE_DOCS=OFF \
+        -DENABLE_GR_AUDIO=OFF \
+        -DENABLE_GR_DTV=OFF \
+        -DENABLE_GR_QTGUI=OFF \
+        -DENABLE_GR_SOAPY=OFF \
+        -DENABLE_GR_TRELLIS=OFF \
+        -DENABLE_GR_UHD=OFF \
+        -DENABLE_GR_VIDEO_SDL=OFF \
+        -DENABLE_GR_VOCODER=OFF \
+        -DENABLE_PYTHON=ON \
+        -Wno-dev
+    cmake --build build
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+}
+
+check() {
+    cd build
+    CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+sha512sums="
+02722532e614d88ee736f39a2cd4339434f9b4b21a5111a3dfc9b9b4b8ec1149ccaa509af323ba5c35409430c76fcb1244c26403e93e169b121e8cbe6a8a2022  gnuradio-3.10.7.0.tar.gz
+"

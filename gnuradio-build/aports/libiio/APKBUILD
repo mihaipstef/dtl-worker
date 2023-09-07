@@ -1,0 +1,46 @@
+pkgname=libiio
+pkgver=0.25
+pkgrel=0
+pkgdesc="Interface to the Linux Industrial Input/Output (IIO) Subsystem"
+url="http://analogdevicesinc.github.io/libiio/"
+arch="x86_64"
+license="LGPL-2.1-or-later"
+depends="
+    dbus
+    avahi
+"
+makedepends="
+    avahi-dev
+    bash
+    bison
+    cmake
+    flex
+    libaio-dev
+    libusb-dev
+    libxml2-dev
+    py3-setuptools
+    samurai
+    "
+subpackages=""
+source="https://github.com/analogdevicesinc/libiio/archive/v$pkgver/libiio-v$pkgver.tar.gz"
+options="!check" # no actual tests
+
+build() {
+    cmake -B build  \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_SBINDIR=bin \
+        -DCMAKE_INSTALL_LIBDIR=lib \
+        -DCMAKE_BUILD_TYPE=None \
+        -DPYTHON_BINDINGS=ON \
+        -DUDEV_RULES_INSTALL_DIR=/usr/lib/udev/rules.d \
+        -DWITH_TESTS=ON
+    cmake --build build
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+e0f2f5545b4c78d1f0f56b037db6e363aab01aad69af3a095b3546af74dab6effe0b00f5c336ef799a739f76c5f16ab76a6b8e823508861edd2745a9d3fd2599  libiio-v0.25.tar.gz
+"

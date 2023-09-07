@@ -1,0 +1,37 @@
+pkgname=gr-dtl
+pkgver=0.6
+pkgrel=0
+pkgdesc="DTL library"
+url="https://github.com/mihaipstef/gr-dtl"
+arch="x86_64"
+license="GPL-3.0-or-later"
+
+depends=""
+depends_dev=""
+
+makedepends="cmake"
+subpackages="$pkgname-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/mihaipstef/gr-dtl/archive/refs/tags/v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+    cmake -B build \
+        -DDTL_LOGGING_ENABLE=false \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=lib
+    cmake --build build
+}
+
+check() {
+    ls
+    # cd build
+    # CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+    DESTDIR="$pkgdir" cmake --build build --target install
+}
+
+sha512sums="
+ea60ec27a48779fc9f93fdcec0e881edc02664c22b02d00e4c5e05ed2677f5bd2790e8dc7d0f8641fe0f114e20cc19760ef80cd161a0a0f8c1f08375818c332f  gr-dtl-0.6.tar.gz
+"
